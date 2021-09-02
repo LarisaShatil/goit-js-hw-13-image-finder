@@ -1,20 +1,17 @@
 import './sass/main.scss';
+import getRefs from './js/refs.js';
+import API from './js/apiService.js'
 
-const refs = {
-  form: document.querySelector('#search-form'),
-  input: document.querySelector('#search'),
-  container: document.querySelector('.container'),
-  more: document.querySelector('#more'),
-};
+
+const refs = getRefs();
 
 const onSubmit = e => {
   e.preventDefault();
   refs.container.innerHTML = '';
-  // innerHTML
-  const value = refs.input.value;
+  
+  const picture = refs.input.value;
 
-  fetch(`https://pixabay.com/api/?q=${value}&key=23129630-9573c017c45744d32c0b55f39`)
-    .then(data => data.json())
+  API.fetchPicture(picture)
     .then(result => renderCollection(result.hits))
     .catch(err => console.log(err));
 };
