@@ -1,63 +1,97 @@
 import './sass/main.scss';
-import getRefs from './js/refs.js';
-import API from './js/apiService.js'
+import { createItem } from './js/createItem.js';
+import LoadMoreBtn from './js/loadMore.js';
+import fetchPictures from './js/apiService.js';
+// import * as basicLightbox from 'basiclightbox';
 
-
-const refs = getRefs();
-
-const onSubmit = e => {
-  e.preventDefault();
-  refs.container.innerHTML = '';
+const refs = {
+  form: document.querySelector('#search-form'),
+  input: document.querySelector('#search'),
+  container: document.querySelector('.container'),
+  moreBtn: document.querySelector('#more'),
+  // gallery: document.querySelector('.gallery')
+}
   
-  const picture = refs.input.value;
+const loadMoreBtn = new LoadMoreBtn({
+  selector: ('#more'),
+  hidden: true,
+});
 
-  API.fetchPicture(picture)
-    .then(result => renderCollection(result.hits))
-    .catch(err => console.log(err));
-};
+const newPictures = new fetchPictures();
+console.log(newPictures);
 
-let currentPage = 1;
+refs.form.addEventListener('submit', onSubmit);
 
-// function createItem ({webformatURL, tags}) {
-//   const article = `<article>
-//     <img src='${webformatURL}' alt='${tags}'/>
-//     <p>${tags}</p>
-//   </article>
-// `
-// refs.container.insertAdjacentHTML('beforeend', article)
+loadMoreBtn.refs.button.addEventListener('click', onLoadMoreBtn);
+
+// refs.gallery.addEventListener('click', onOpenModal)
+
+
+
+function onSubmit(e) {
+  e.preventDefault();
+
+  newPictures.searchQuery = e.currentTarget.elements.query.value;
+
+  loadMoreBtn.show();
+  newPictures.resetPage();
+
+  clearContainer();
+  bringPictures();
+
+}
+
+function onLoadMoreBtn() {
+  bringPictures();
+ 
+  scrollToMoreBtn();
+}
+
+// function onOpenModal(event) {
+//     if (event.target.nodeName !== 'IMG') return;
+//   console.log("modal");
+//     const src = event.target.dataset.source;
+//     const instance = basicLightbox.create(`
+//     <img src=${src} width="800" height="600">`)
+//     instance.show()
 // }
 
-function createItem({ webformatURL, likes, views, comments, downloads }) {
-  const article = `<div class="photo-card">
-  <img src="${webformatURL}" alt="" />
+function bringPictures() {
+      newPictures.fetchPictures()
+        .then(pictures => { renderCollection(pictures) })
+  
+      // window.scrollTo({
+      //           top: document.documentElement.offsetHeight,
+      //           behavior: 'smooth',
+      // });
+  // window.scrollTo(0, document.body.scrollHeight);
 
-  <div class="stats">
-    <p class="stats-item">
-      <i class="material-icons">thumb_up</i>
-     ${likes}
-    </p>
-    <p class="stats-item">
-      <i class="material-icons">visibility</i>
-    ${views}
-    </p>
-    <p class="stats-item">
-      <i class="material-icons">comment</i>
-      ${comments}
-    </p>
-    <p class="stats-item">
-      <i class="material-icons">cloud_download</i>
-      ${downloads}
-    </p>
-  </div>
-</div>
-`;
+}
 
-  refs.container.insertAdjacentHTML('beforeend', article);
+function scrollToMoreBtn() {
+
+
+  // window.scrollTo(0, document.body.scrollHeight);
+  // window.scrollTo(0, document.querySelector("#more").scrollHeight)
+  
+  // let scrollingElement = (document.querySelector("#more") || document.body);
+  // scrollingElement.scrollTop = scrollingElement.scrollHeight;
+  
+    let element = document.querySelector("#more");
+   element.scrollTop = element.scrollHeight - element.clientHeight;
+
+  console.log("object");
+  //      window.scrollTo({
+  //               top: document.documentElement.offsetHeight,
+  //               behavior: 'smooth',
+  //     });
 }
 
 function renderCollection(arr) {
+  console.log(arr);
   arr.forEach(el => createItem(el));
 }
 
-refs.form.addEventListener('submit', onSubmit);
-refs.more.addEventListener('click', onSubmit);
+function clearContainer() {
+  refs.container.innerHTML = '';
+}
