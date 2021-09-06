@@ -18,12 +18,9 @@ const loadMoreBtn = new LoadMoreBtn({
 });
 
 const newPictures = new fetchPictures();
-console.log(newPictures);
 
 refs.form.addEventListener('submit', onSubmit);
-
 loadMoreBtn.refs.button.addEventListener('click', onLoadMoreBtn);
-
 // refs.gallery.addEventListener('click', onOpenModal)
 
 
