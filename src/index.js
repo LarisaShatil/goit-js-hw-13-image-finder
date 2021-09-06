@@ -38,13 +38,10 @@ function onSubmit(e) {
 
   clearContainer();
   bringPictures();
-
 }
 
 function onLoadMoreBtn() {
   bringPictures();
- 
-  scrollToMoreBtn();
 }
 
 // function onOpenModal(event) {
@@ -57,35 +54,17 @@ function onLoadMoreBtn() {
 // }
 
 function bringPictures() {
-      newPictures.fetchPictures()
-        .then(pictures => { renderCollection(pictures) })
-  
-      // window.scrollTo({
-      //           top: document.documentElement.offsetHeight,
-      //           behavior: 'smooth',
-      // });
-  // window.scrollTo(0, document.body.scrollHeight);
-
+  newPictures.fetchPictures()
+    .then(pictures => { renderCollection(pictures) })
+    .then(() => refs.moreBtn.scrollIntoView({ behavior: 'smooth', block: 'end' }))
+    .catch(err => console.log(err));
 }
 
-function scrollToMoreBtn() {
+// function scrollToMoreBtn() {
 
-
-  // window.scrollTo(0, document.body.scrollHeight);
-  // window.scrollTo(0, document.querySelector("#more").scrollHeight)
-  
-  // let scrollingElement = (document.querySelector("#more") || document.body);
-  // scrollingElement.scrollTop = scrollingElement.scrollHeight;
-  
-    let element = document.querySelector("#more");
-   element.scrollTop = element.scrollHeight - element.clientHeight;
-
-  console.log("object");
-  //      window.scrollTo({
-  //               top: document.documentElement.offsetHeight,
-  //               behavior: 'smooth',
-  //     });
-}
+//   // WORKS to the TOP
+//   // window.scrollTo(0, document.querySelector("#more").scrollHeight)
+// }
 
 function renderCollection(arr) {
   console.log(arr);
