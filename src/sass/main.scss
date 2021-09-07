@@ -3,6 +3,17 @@
 @import './button';
 @import './stats';
 
+body {
+  height: 100vh;
+  background: repeating-linear-gradient(
+    to bottom,
+    #039be5 0px,
+    #039be5 20px,
+    #90caf9 20px,
+    #90caf9 40px
+  );
+}
+
 .container {
   display: grid;
   justify-content: center;
@@ -14,5 +25,5 @@
 img {
   display: block;
   width: 100%;
-  height: 75%;
+  height: 250px;
 }
