@@ -38,7 +38,10 @@ function onSubmit(e) {
 }
 
 function onLoadMoreBtn() {
-  bringPictures();
+    newPictures.fetchPictures()
+    .then(pictures => { renderCollection(pictures) })
+    .then(() => refs.moreBtn.scrollIntoView({ behavior: 'smooth', block: 'end' }))
+    .catch(err => console.log(err));
 }
 
 // function onOpenModal(event) {
@@ -53,15 +56,14 @@ function onLoadMoreBtn() {
 function bringPictures() {
   newPictures.fetchPictures()
     .then(pictures => { renderCollection(pictures) })
-    .then(() => refs.moreBtn.scrollIntoView({ behavior: 'smooth', block: 'end' }))
     .catch(err => console.log(err));
 }
 
-// function scrollToMoreBtn() {
-
-//   // WORKS to the TOP
-//   // window.scrollTo(0, document.querySelector("#more").scrollHeight)
-// }
+async function scrollToMoreBtn() {
+  const pictures = await bringPictures();
+  console.log('1');
+  refs.moreBtn.scrollIntoView({ behavior: 'smooth', block: 'end' })
+}
 
 function renderCollection(arr) {
   console.log(arr);
@@ -71,3 +73,4 @@ function renderCollection(arr) {
 function clearContainer() {
   refs.container.innerHTML = '';
 }
+
